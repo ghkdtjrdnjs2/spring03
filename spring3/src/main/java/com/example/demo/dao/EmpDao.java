@@ -3,6 +3,7 @@ package com.example.demo.dao;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -14,6 +15,15 @@ public interface EmpDao {
 	// 결과를 boolean으로 내보내기 -> 0이면 거짓, 0이 아니면 참
 	@Select("select count(*) from emp where ename=#{ename} and empno=#{empno} and rownum=1")
 	public Boolean findByEnameAndEmpno(String ename, Long empno);
+	
+	// insert, delete, update의 결과는 변경된 행의 개수(성공하면 1이상의 값)
+	
+	// 마이바티스는 insert 할 때 기본적으로 null입력이 안된다
+	@Insert("insert into emp(empno,ename,job,mgr,hiredate,sal,comm,deptno)values(#{empno},#{ename},#{job},#{mgr},#{hiredate},#{sal},#{comm,jdbcType=INTEGER},#{deptno}")
+	public Long save(Emp emp);
+	
+	@Select("select max(empno) from emp")
+	public Long max();
 	
 	@Select("select empno, ename, job, hiredate, deptno from emp")
 	public List<Emp> findAll();
